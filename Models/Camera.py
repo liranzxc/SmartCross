@@ -15,6 +15,8 @@ class P(Process):
            self.d["frame"] = frame
            print("pulling forever")
 
+        cam.release()
+
     def read(self):
         return self.d["frame"]
 
