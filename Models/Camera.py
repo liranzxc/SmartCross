@@ -11,9 +11,14 @@ class P(Process):
     def run(self):
         cam = cv2.VideoCapture(self.d["src"])
         while self.d["fulltime"]:
-           grab,frame = cam.read()
-           self.d["frame"] = frame
-           print("pulling forever")
+           try:
+               grab,frame = cam.read()
+               if grab:
+                    self.d["frame"] = frame
+                    print("pulling forever")
+                    
+           except:
+                print("error to pull in : "+ self.d["src"])
 
         cam.release()
 

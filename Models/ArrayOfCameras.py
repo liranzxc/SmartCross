@@ -18,7 +18,16 @@ if __name__ == '__main__':
     manager = Manager()
     process = [] 
     dics = []
-    sources = [0,1,"http://192.168.1.17:8080/video"]
+    sources = [
+    "http://193.251.18.40:8001/mjpg/video.mjpg","http://187.157.229.132/mjpg/video.mjpg",
+    "http://118.243.204.173/cgi-bin/faststream.jpg?stream=half&fps=15&rand=COUNTER",
+    "http://46.252.143.150/cgi-bin/faststream.jpg?stream=half&fps=15&rand=COUNTER",
+    "http://162.245.149.145/mjpg/video.mjpg",
+    "http://90.176.96.128/img/video.mjpeg",
+    "http://185.2.241.221:8090/mjpg/video.mjpg",
+    "http://174.6.126.86/mjpg/video.mjpg"
+    
+     ] ## list of source of camera 
 
     for s in sources: ## create dics with sources
         dics.append(createdic(manager,s))
@@ -29,13 +38,17 @@ if __name__ == '__main__':
     for p in process: ## start process
         p.start()
 
-    sleep(2)
+    sleep(5)
 
     ## sample of image
-    for p in process:
-        cv2.imshow("frame"+str(p),p.read())
-        cv2.waitKey(1)
-        sleep(3)
+    for i in range(3000):
+        for p in process:
+            try:
+                cv2.imshow("frame"+str(p),p.read())
+                cv2.waitKey(1)
+            except:
+                pass
+           
 
     ## shutting off
     for d in dics:
@@ -44,7 +57,10 @@ if __name__ == '__main__':
     for p in process:
         p.join()
 
-    cv2.waitKey(0)
+    print("stopped")
+    cv2.destroyAllWindows()
+
+    
 
     
 
