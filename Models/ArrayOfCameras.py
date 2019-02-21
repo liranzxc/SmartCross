@@ -1,6 +1,10 @@
 import os
+import sys
 from multiprocessing import Manager, Process
 from time import sleep
+
+
+from yolodata.Detector import DetectorOBJ
 
 import cv2
 import numpy as np
@@ -10,18 +14,13 @@ from Utils import *
 
 
 if __name__ == '__main__':
-
     ## create multi camera process
     manager = Manager()
     process = [] 
     dics = []
     sources = [
-    "http://90.176.96.128/img/video.mjpeg",
-    "http://185.2.241.221:8090/mjpg/video.mjpg",
-    "http://174.6.126.86/mjpg/video.mjpg",
-    "http://93.157.18.93:8083/oneshotimage1?1550665664",
-    "http://160.218.245.169:8080/snap.jpg?JpegSize=M&JpegCam=1&r=1550665077"
-
+    0,1
+   
     
      ] ## list of source of camera 
 
@@ -39,13 +38,22 @@ if __name__ == '__main__':
 
     ## sample of image
     
-    print("here before")
-    list(map(Show,process)) ## each process return a image and display her
-    sleep(2)
+    #print("here before")
+    #list(map(Show,process)) ## each process return a image and display her
+    #sleep(2)
 
     frames = grabFrames(process)
     print(len(frames))
 
+    ## detection
+    dr = manager.dict()
+    dr["images"] = frames
+    k = DetectorOBJ(dr) ## need to import Detector
+    k.start() ## start detection
+
+    k.join()
+
+    print(dr["results"])
    
     ## shutting off
     for d in dics:
