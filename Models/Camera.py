@@ -3,6 +3,8 @@ from time import sleep
 import cv2
 import numpy as np
 import os
+import datetime
+from Utils import * 
 class P(Process):
     def __init__(self,d):
         super(P, self).__init__()
@@ -10,43 +12,41 @@ class P(Process):
         
     def run(self):
         cam = cv2.VideoCapture(self.d["src"])
+
+        self.d["ready"] = True
+        print("Process Started! Name:"+self.d["name"])
         while self.d["fulltime"]:
-           try:
-               grab,frame = cam.read()
-               if grab:
-                    self.d["frame"] = frame
-                    print("pulling forever")
-                    
-           except:
-                print("error to pull in : "+ self.d["src"])
+            grab,frame = cam.read()
+            if grab:
+                self.d["frame"] = frame
+            #print("pulling")
+           
+              
 
         cam.release()
 
     def read(self):
-        return self.d["frame"]
-
+        if self.d.get("frame") is not None and self.d["ready"]: 
+                return (self.d["frame"],self.d["name"],datetime.datetime.now()) # (frame ,name,time)
+        else:
+                return (None,self.d["name"],datetime.datetime.now()) # (frame ,name,time)
         
-
-
+        
+     
+             
 if __name__ == '__main__':
+    ## create multi camera process
     manager = Manager()
-    d = manager.dict()
-    d["src"] = "http://192.168.1.17:8080/video"
-    d["fulltime"] = True
+    d = createdic(manager,0,"Rogaland, Stavanger Camera")
     process = P(d)
     process.start()
-    sleep(2)
 
-    for i in range(5):
-        cv2.imshow("frame"+str(i),process.read())
-        cv2.waitKey(1)
-        print("Capture now ! reset !")
-        sleep(3)
+    sleep(15)
+    for i in range(10):
+        print(process.read())
+        print("sleep now")
+        sleep(1)
 
-    d["fulltime"] = False 
+    d["fulltime"] = False
 
     process.join()
-
-    
-    
-   

@@ -1,44 +1,31 @@
 import cv2
 import numpy
-
-def Show(p):
-        try:
-            cv2.imshow("frame"+str(p),p.read())
-            cv2.waitKey(1)
-        except:
-            print("error in show method in process " + str(p.d["name"]))
-            pass
+import random
+import time
+def Show(frameT):
+    frame,name,time = frameT
+    try:
+        cv2.imshow("Camera: "+name,frame) # for update frames 
+        #cv2.imshow("Camera: "+name+"  -  time: "+str(time),frame) # for image each frame
+        cv2.waitKey(1)
+    except:
+        print("error in show method in process ")
+        
             
 
-def createdic(manager,src):
+def createdic(manager,src,CameraName):
         d = manager.dict()
         d["src"] = src
-        d["name"] = src
+        d["name"] = CameraName
         d["fulltime"] = True
+        d["ready"] = False
+
         return d
 
-def trygrabframe(p):
-    try:
-        frame = p.read()
-        if frame is not None:
-            return frame
-        else:
-            return None
-    except:
-        return None
 
-def grabFrames(process):
-    frames = []
-
-    for p in process:
-        _frame = trygrabframe(p)
-        if _frame is None:
-            while(_frame is None):
-                _frame = trygrabframe(p)
-                print("trying to get frame from process : "+str(p))
-        else:
-            frames.append(_frame)
-
-    print("Successfully grab "+str(len(process)))
-    return frames
-    
+def grabFrames(p):
+    frame,name,time = p.read()
+    if frame is not None:
+        return (frame,name,time)
+    else:
+        return (None,name,time)
