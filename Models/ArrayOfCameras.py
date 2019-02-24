@@ -26,13 +26,15 @@ if __name__ == '__main__':
     sources = [
 
         
-        ("Fronted Camera",0),("Second Camera",1),
+        #("Fronted Camera",0)#("Second Camera",1),
         #("Movie",r"B:\Earthcam\crossing.mkv")
-        ("Phone  camera","http://192.168.1.5:8080/video")
+        #("Phone  camera","http://192.168.1.5:8080/video")
+        ("Rogaland","http://195.1.188.76/mjpg/video.mjpg"),
         #("Tokyo, Tokyo","http://118.243.204.173/cgi-bin/faststream.jpg?stream=half&fps=15&rand=COUNTER"),
-        #("Madrid, Paracuellos De Jaram","http://46.24.35.53/mjpg/video.mjpg"),
+        ("Madrid, Paracuellos De Jaram","http://46.24.35.53/mjpg/video.mjpg"),
+        ("Kuala Lumpur","http://58.26.96.56/mjpg/video.mjpg")
         #("Fast Roading Road","http://138.188.42.155:88/mjpg/video.mjpg"),
-        #("Morelos","http://187.157.229.132/mjpg/video.mjpg"),
+        #("Morelos","http://187.157.229.132/mjpg/video.mjpg")
         #("Mobotix camera ","http://50.246.145.122/cgi-bin/faststream.jpg?stream=half&fps=15&rand=COUNTER"),
         #("Oklahoma, Fort Cobb ","http://156.110.54.197/oneshotimage1?1550950007"),
         #("Bristol","http://69.27.83.101/oneshotimage1?1550950433"),
@@ -64,17 +66,16 @@ if __name__ == '__main__':
 
 
    
-    for i in range(15):
+    for i in range(45):
         framesTls = []
         framesTls = list(map(grabFrames,process))
         
-
         frames,names,times = zip(*framesTls)
         if any(f is None for f in frames):
             print("Found Frame is None")   
         else:
             queue.put(framesTls) ## producer
-            #list(map(Show,framesTls)) ## each process return a image and display her
+            list(map(Show,framesTls)) ## each process return a image and display her
             
         sleep(1)
 
