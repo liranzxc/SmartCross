@@ -1,0 +1,8 @@
+{
+    
+    "coco.names" : "B:\\SmartCross\\Models\\yolodata\\data\\coco.names",
+    "cfg" : "B:\\SmartCross\\Models\\yolodata\\cfg\\yolov3.cfg",
+    "weights" : "B:\\SmartCross\\Models\\yolodata\\yolov3.weights"
+
+
+}

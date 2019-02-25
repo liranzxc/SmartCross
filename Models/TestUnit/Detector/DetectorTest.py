@@ -11,7 +11,7 @@ from time import sleep
 import datetime
 class DetectorTest(unittest.TestCase):
 
-    def test_image(self):
+    def test_image_1(self):
         print("ImageTest")
         print(os.getcwd())
         image =cv2.imread("datatest\cars1.jpg")
@@ -20,7 +20,6 @@ class DetectorTest(unittest.TestCase):
         self.q.put([sample])
 
         actual_result = self.output.get()
-       
         assert(actual_result[title] == {'car': 43, 'person': 1, 'truck': 5})
         
 
@@ -30,7 +29,8 @@ class DetectorTest(unittest.TestCase):
         manager = Manager()
         self.q = manager.Queue()
         self.output = manager.Queue()
-        self.detector = DetectorOBJ(self.q,self.output)
+        config_path = "B:\SmartCross\Models\yolodata\config.json" # change to your path
+        self.detector = DetectorOBJ(self.q,self.output,config_path)
         self.detector.start()
 
         sleep(10)

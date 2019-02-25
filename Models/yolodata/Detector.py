@@ -4,7 +4,7 @@ import time
 import torch 
 import torch.nn as nn
 import datetime
-
+import json
 from torch.autograd import Variable
 import numpy as np
 import cv2 
@@ -28,7 +28,7 @@ from collections import Counter
 
 
 class test_net(nn.Module):
-    def __init__(self, num_layers, input_size):
+    def __init__(self, num_layers, input_size,dogpath):
         super(test_net, self).__init__()
         self.num_layers= num_layers
         self.linear_1 = nn.Linear(input_size, 5)
@@ -41,7 +41,7 @@ class test_net(nn.Module):
         return fwd(x)
         
 def get_test_input(input_dim, CUDA):
-    img = cv2.imread("dog-cycle-car.png")
+    img = cv2.imread(dogpath)
     img = cv2.resize(img, (input_dim, input_dim)) 
     img_ =  img[:,:,::-1].transpose((2,0,1))
     img_ = img_[np.newaxis,:,:,:]/255.0
@@ -56,10 +56,12 @@ def get_test_input(input_dim, CUDA):
 
 
 class DetectorOBJ(Process):
-    def __init__(self,queue,queue_output):
+    def __init__(self,queue,queue_output,config_path):
         super(DetectorOBJ, self).__init__()
         self.queue = queue
         self.output = queue_output
+        with open(config_path, "r") as read_file:
+            self.config = json.load(read_file)
         
     def run(self):
        
@@ -73,12 +75,12 @@ class DetectorOBJ(Process):
 
         num_classes = 80
         
-        classes = load_classes('data/coco.names') 
+        classes = load_classes(self.config["coco.names"]) 
 
         #Set up the neural network
         print("Loading network.....")
-        model = Darknet("cfg/yolov3.cfg")
-        model.load_weights("yolov3.weights")
+        model = Darknet(self.config["cfg"])
+        model.load_weights(self.config["weights"])
         print("Network successfully loaded")
 
 
