@@ -2,6 +2,8 @@ import cv2
 import numpy as np 
 import unittest
 import sys
+sys.path.append("B:\SmartCross\Models\yolodata")
+
 from Detector import DetectorOBJ
 from multiprocessing import Manager 
 import os
@@ -17,9 +19,9 @@ class DetectorTest(unittest.TestCase):
         sample = (image,title,str(datetime.datetime.now()))
         self.q.put([sample])
 
-        while self.detector.readResult() == None:
-            pass
-        assert(self.detector.readResult()[title] == {'car': 43, 'person': 1, 'truck': 5})
+        actual_result = self.output.get()
+       
+        assert(actual_result[title] == {'car': 43, 'person': 1, 'truck': 5})
         
 
        
@@ -27,17 +29,16 @@ class DetectorTest(unittest.TestCase):
         
         manager = Manager()
         self.q = manager.Queue()
-        self.d = manager.dict()
-        self.detector = DetectorOBJ(self.q,self.d)
+        self.output = manager.Queue()
+        self.detector = DetectorOBJ(self.q,self.output)
         self.detector.start()
 
         sleep(10)
        
     def tearDown(self):
+        self.output.put(None)
         self.q.put(None)
         self.detector.join()
 
 if __name__ == '__main__':
-    os.chdir("..")
-    print(os.getcwd())
     unittest.main()

@@ -11,14 +11,14 @@ import cv2
 import argparse
 import os 
 import os.path as osp
-from yolodata.util import *
-from yolodata.darknet import Darknet
+#from yolodata.util import *
+#from yolodata.darknet import Darknet
 
-#from util import *
-#from darknet import Darknet
-from yolodata.preprocess_liran import prep_image, inp_to_image
+from util import *
+from darknet import Darknet
+#from yolodata.preprocess_liran import prep_image, inp_to_image
 
-#from preprocess_liran import prep_image,inp_to_image
+from preprocess_liran import prep_image,inp_to_image
 import pandas as pd
 import random 
 import pickle as pkl
@@ -62,12 +62,7 @@ class DetectorOBJ(Process):
         self.output = queue_output
         
     def run(self):
-        ## change path 
-        modelpath = os.getcwd()
-        yolodatapath= os.getcwd()+"\yolodata"
-        os.chdir(yolodatapath)
-        ### 
-
+       
         mydicResult = {} 
         batch_size = 1
         confidence = 0.5
@@ -199,8 +194,6 @@ class DetectorOBJ(Process):
         
                 torch.cuda.empty_cache()
 
-                ## change path back to parent
-            os.chdir(modelpath)
             mydicResult["time"] = str(datetime.datetime.now())
             #print(mydicResult)
 

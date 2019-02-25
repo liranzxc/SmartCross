@@ -8,8 +8,8 @@ from torch.autograd import Variable
 import numpy as np
 import cv2 
 import matplotlib.pyplot as plt
-from yolodata.bbox import bbox_iou
-#from bbox import bbox_iou
+#from yolodata.bbox import bbox_iou
+from bbox import bbox_iou
 
 def count_parameters(model):
     return sum(p.numel() for p in model.parameters())
