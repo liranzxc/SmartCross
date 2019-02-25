@@ -17,9 +17,14 @@ if __name__ == '__main__':
     ## create multi camera process
     manager = Manager()
     queue = manager.Queue()
+    queue_output = manager.Queue()
+
     ## detection
-    k = DetectorOBJ(queue) ## need to import Detector
+    k = DetectorOBJ(queue,queue_output) ## need to import Detector
     k.start() ## start detection
+
+    outputprocess = Process(target=Output_Method,args=(queue_output,))
+    outputprocess.start()
 
     process = [] 
     dics = []
@@ -84,6 +89,10 @@ if __name__ == '__main__':
     k.join()
     print(" Detector stopped")
 
+    print("stop output Thread")
+    queue_output.put(None)
+    outputprocess.join()
+    print("stoped output Thread")
     ## shutting off
     for d in dics:
         d["fulltime"] = False

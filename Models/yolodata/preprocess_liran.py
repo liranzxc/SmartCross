@@ -7,10 +7,10 @@ from torch.autograd import Variable
 import numpy as np
 import cv2 
 import matplotlib.pyplot as plt
-#from yolodata.util import count_parameters as count
-#from yolodata.util import convert2cpu as cpu
+from yolodata.util import count_parameters as count
+from yolodata.util import convert2cpu as cpu
 
-from util import count_parameters as count ,convert2cpu as cpu
+#from util import count_parameters as count ,convert2cpu as cpu
 from PIL import Image, ImageDraw
 
 

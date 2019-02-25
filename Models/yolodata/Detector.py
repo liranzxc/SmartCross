@@ -11,14 +11,14 @@ import cv2
 import argparse
 import os 
 import os.path as osp
-#from yolodata.util import *
-#from yolodata.darknet import Darknet
+from yolodata.util import *
+from yolodata.darknet import Darknet
 
-from util import *
-from darknet import Darknet
-#from yolodata.preprocess_liran import prep_image, inp_to_image
+#from util import *
+#from darknet import Darknet
+from yolodata.preprocess_liran import prep_image, inp_to_image
 
-from preprocess_liran import prep_image,inp_to_image
+#from preprocess_liran import prep_image,inp_to_image
 import pandas as pd
 import random 
 import pickle as pkl
@@ -56,10 +56,10 @@ def get_test_input(input_dim, CUDA):
 
 
 class DetectorOBJ(Process):
-    def __init__(self,queue,d):
+    def __init__(self,queue,queue_output):
         super(DetectorOBJ, self).__init__()
         self.queue = queue
-        self.d = d
+        self.output = queue_output
         
     def run(self):
         ## change path 
@@ -204,11 +204,8 @@ class DetectorOBJ(Process):
             mydicResult["time"] = str(datetime.datetime.now())
             #print(mydicResult)
 
-            self.d["result"] = mydicResult
+            self.output.put(mydicResult)
         
-    def readResult(self):
-        return self.d.get("result")
-           
 
 
 

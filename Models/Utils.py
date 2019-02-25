@@ -29,3 +29,12 @@ def grabFrames(p):
         return (frame,name,time)
     else:
         return (None,name,time)
+
+
+def Output_Method(outputQueue):
+        while True:
+                results = outputQueue.get()
+                if results is None:
+                        break
+                else:
+                        print(results)
