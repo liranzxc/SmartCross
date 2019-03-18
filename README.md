@@ -18,3 +18,4 @@ https://drive.google.com/file/d/1oQFv0239fVy9kdCy1o3v44DPmr1Ot5Pg/view?usp=shari
 
 Diagram :
 
+![SmartCross](https://i.ibb.co/dKFDmLb/Smart-Cross-Lights-Diagram.jpg)
